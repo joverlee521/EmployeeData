@@ -37,6 +37,26 @@ var config = {
     return duration;
   }
 
+  function editData(){
+    var spans = document.getElementsByTagName("td"),
+    index,
+    span;
+
+    for (index = 0; index < spans.length; ++index) {
+    span = spans[index];
+    if (span.contentEditable) {
+        span.onblur = function() {
+            var text = this.innerHTML;
+            text = text.replace(/&/g, "&amp").replace(/</g, "&lt;");
+            console.log("Content committed, span " +
+                    (this.id || "anonymous") +
+                    ": '" +
+                    text + "'");
+        };
+    }
+}
+  }
+
   function display(data){
     var newKey = data.key;
     var newRow = $("<tr>");
@@ -48,10 +68,13 @@ var config = {
     var newTotalBilled = $("<td>").text(parseInt(data.val().firebaseMonthlyRate) * calmonthsworked(data.val().firebaseStartDate));
     var deleteButton = $("<button>").text("Delete"); 
     deleteButton.addClass("my-2 delete-button");
+    newStartDate.addClass("true");
     newRow.append(newName, newRole, newStartDate, newMonthsWorked, newMonthlyRate, newTotalBilled, deleteButton);
+    newStartDate.attr("contenteditable", "true");
     deleteButton.attr("data-key", newKey);
     newRow.attr("id", newKey);
-    $("tbody").append(newRow);    
+    $("tbody").append(newRow);  
+    editData();  
   }
 
   database.ref().on("child_added", function(data){
@@ -64,3 +87,4 @@ $(document).on("click",".delete-button", function(){
     database.ref().child(thisKey).remove();
     $("#" + thisKey).remove();
 })
+
