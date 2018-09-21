@@ -70,7 +70,7 @@ var config = {
     deleteButton.addClass("my-2 delete-button");
     newStartDate.addClass("true");
     newRow.append(newName, newRole, newStartDate, newMonthsWorked, newMonthlyRate, newTotalBilled, deleteButton);
-    newStartDate.attr("contenteditable", "true");
+    $("td").attr("contenteditable", "true");
     deleteButton.attr("data-key", newKey);
     newRow.attr("id", newKey);
     $("tbody").append(newRow);  
